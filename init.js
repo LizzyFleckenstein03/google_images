@@ -2,67 +2,63 @@ const fetch = require("node-fetch")
 const cheerio = require("cheerio")
 const jsonic = require("jsonic")
 
-const makeImage = elem => {
-	return {
-		url: elem[0],
-		size: {
-			width: elem[2],
-			height: elem[1],
-		}
-	}
-}
-
-module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0") => {
-	return fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}})
-		.then(res => res.text())
-		.then(data => cheerio.load(data, null, false))
-		.then(content => content("script"))
-		.then(scripts => scripts.toArray())
-		.then(scripts => scripts.map(script => script.children[0]?.data))
-		.then(scripts => scripts.filter(script => script?.search("http") >= 0))
-		.then(scripts => scripts[4])
-		.then(script => script.slice("AF_ini2tDataCallback(".length, script.length - ");".length))
-		.then(jsonic)
-		.then(data => data.data[31][0][12][2])
-		.then(data => data.map(elem => elem[1]))
-		.then(data => data.map(elem => new Object({
-			preview: makeImage(elem[2]),
-			image: makeImage(elem[3]),
-			color: elem[6],
-			link: elem[9][2003][2],
-			title: elem[9][2003][3],
-		})))
-}
+module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0") =>
+	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}}).then(res =>
+		jsonic(cheerio.load(res.text(), null, false)("script")
+			.toArray()
+			.map(script => script.children[0]?.data)
+			.find(script => script?.startsWith("AF_initDataCallback"))
+			.slice("AF_initDataCallback(".length, -");".length)
+		).data[31][0][12][2].map(elem => new Object({
+			image: {
+				url: elem[1][3][0],
+				size: {
+					width: elem[1][3][2],
+					height: elem[1][3][1],
+				},
+			},
+			preview: {
+				url: elem[1][2][0],
+				size: {
+					width: elem[1][2][2],
+					height: elem[1][2][1],
+				},
+			},
+			color: elem[1][6],
+			link: elem[1][9][2003][2],
+			title: elem[1][9][2003][3],
+		}))
+	)
 
 /*
-In case google makes minor changes, here are some snippets used to reverse engineer the format:
 
+In case google makes changes, here are some snippets used to reverse engineer the format:
 
-Find which script to use (use the query astolfo+images for this)
-----------------------------------------------------------------
+1. Find which script contains the init data (use the query astolfo+images for this)
+-----------------------------------------------------------------------------------
 
-	.then(scripts => scripts.filter(script => script.children[0]?.data?.search("http") >= 0))
-	.then(scripts => scripts.reduce((a, b, i) => b.children[0]?.data?.search("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/items/622220/f4d2d4074167411a7e15b9a845cf18b434c02af3.jpg") >= 0 ? i : a), -1)
+	scripts.find(script => script.search("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/items/622220/f4d2d4074167411a7e15b9a845cf18b434c02af3.jpg") >= 0)
 
-Reverse engineer data passed to AF_initDataCallback
----------------------------------------------------
+2. Reverse engineer format of init data passed to AF_initDataCallback
+---------------------------------------------------------------------
 
 const findStrings = (obj, path = "") => {
-	let found = [];
+	let found = []
 
 	for (k in obj) {
-		let v = obj[k];
-		let t = typeof v;
+		let v = obj[k]
+		let t = typeof v
 		let p = path + "." + k
 
 		if (t == "object")
-			found = found.concat(findStrings(v, p));
+			found = found.concat(findStrings(v, p))
 		else if (t == "string")
-			found.push([v, p]);
+			found.push([v, p])
 	}
 
-	return found;
-};
+	return found
+}
 
-	.then(findStrings)
+	console.log(findStrings(initData))
+
 */
