@@ -10,11 +10,11 @@ Exports `search` function that takes query string as first argument and optional
 {
 	preview: {
 		url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpttHz6N94mnwy5NbULk733B3srNYPMsmaYQ&usqp=CAU',
-		size: { width: 168, height: 300 }
+		size: { width: 300, height: 168 }
 	},
 	image: {
 		url: 'https://en.free-wallpapers.su/data/media/3/big/anm5679.jpg',
-		size: { width: 1080, height: 1920 }
+		size: { width: 1920, height: 1080 }
 	},
 	color: 'rgb(232,190,194)',
 	link: 'https://en.free-wallpapers.su/img116919.htm',

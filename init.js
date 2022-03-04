@@ -23,11 +23,10 @@ const findStrings = (obj, path = "") => {
 		let t = typeof v;
 		let p = path + "." + k
 
-		
 		if (t == "object")
 			found = found.concat(findStrings(v, p));
 		else if (t == "string")
-			found.push([v, p]);		
+			found.push([v, p]);
 	}
 
 	return found;
@@ -47,8 +46,8 @@ const makeImage = elem => {
 	return {
 		url: elem[0],
 		size: {
-			width: elem[1],
-			height: elem[2],
+			width: elem[2],
+			height: elem[1],
 		}
 	}
 };
@@ -62,7 +61,7 @@ module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86
 		.then(scripts => scripts.map(script => script.children[0]?.data))
 		.then(scripts => scripts.filter(script => script?.search("http") >= 0))
 		.then(scripts => scripts[4])
-		.then(script => script.slice("AF_initDataCallback(".length, script.length - ");".length))
+		.then(script => script.slice("AF_ini2tDataCallback(".length, script.length - ");".length))
 		.then(jsonic)
 		.then(data => data.data[31][0][12][2])
 		.then(data => data.map(elem => elem[1]))
