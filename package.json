@@ -1,0 +1,24 @@
+{
+  "name": "google_images",
+  "version": "1.0.0",
+  "description": "Reverse Engineered Google Image Search API",
+  "main": "init.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EliasFleckenstein03/google_images.git"
+  },
+  "author": "EliasFleckenstein03",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EliasFleckenstein03/google_images/issues"
+  },
+  "homepage": "https://github.com/EliasFleckenstein03/google_images#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "jsonic": "^1.0.1",
+    "node-fetch": "^2.0.0"
+  }
+}
