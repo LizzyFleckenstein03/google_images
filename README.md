@@ -5,7 +5,7 @@ The usage of this API does NOT require an API key, nor is it rate limited.
 
 ## Usage
 
-Exports `search` function that takes query string as first argument and optionally user agent as second. Usage of the user agent argument has not been tested.
+Exports `search` function that takes query string as first argument, a boolean safeSearch as second and optionally user agent as second. Usage of the user agent argument has not been tested.
 `search` returns an promise that resolves to an array with objects like this (should be self-explanatory):
 
 ```js
@@ -31,5 +31,7 @@ const google_images = require("free-google-images");
 
 google_images.search("astolfo+images").then(results => results.forEach(r => console.log(r.image.url)))
 google_images.searchRandom("astolfo+images").then(result => console.log(result.image.url))
+
+google_images.searchRandom("hentai", true).then(result => console.log(result.image.url)) // no results because of safe search
 ```
 
