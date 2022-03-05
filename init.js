@@ -3,9 +3,9 @@ const cheerio = require("cheerio")
 const jsonic = require("jsonic")
 
 module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0") =>
-	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}}).then(res =>
+	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}}).then(res => res.text()).then(data =>
 		jsonic( // jsonic is used because JSON.parse() requires strict JSON and eval() allows for remote code execution
-			cheerio.load(res.text(), null, false)                      // parse HTML
+			cheerio.load(data, null, false)                            // parse HTML
 			("script")                                                 // find script tags
 			.toArray()                                                 // convert cheerio list to array
 			.map(script => script.children[0]?.data)                   // map script tags to their inline code
