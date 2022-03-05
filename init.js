@@ -4,12 +4,14 @@ const jsonic = require("jsonic")
 
 module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0") =>
 	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}}).then(res =>
-		jsonic(cheerio.load(res.text(), null, false)("script")
-			.toArray()
-			.map(script => script.children[0]?.data)
-			.find(script => script?.startsWith("AF_initDataCallback"))
-			.slice("AF_initDataCallback(".length, -");".length)
-		).data[31][0][12][2].map(elem => new Object({
+		jsonic( // jsonic is used because JSON.parse() requires strict JSON and eval() allows for remote code execution
+			cheerio.load(res.text(), null, false)                      // parse HTML
+			("script")                                                 // find script tags
+			.toArray()                                                 // convert cheerio list to array
+			.map(script => script.children[0]?.data)                   // map script tags to their inline code
+			.find(script => script?.startsWith("AF_initDataCallback")) // find script that contains init data
+			.slice("AF_initDataCallback(".length, -");".length)        // remove call to init function
+		).data[31][0][12][2].map(elem => new Object({ // map the parts of the init data we know/care about to something readable
 			image: {
 				url: elem[1][3][0],
 				size: {
@@ -24,9 +26,9 @@ module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86
 					height: elem[1][2][1],
 				},
 			},
-			color: elem[1][6],
+			color: elem[1][6], // average color of the image, probably (used as placeholder while loading the image)
 			link: elem[1][9][2003][2],
-			title: elem[1][9][2003][3],
+			title: elem[1][9][2003][3], // there is some more data in elem[1][9] that could potentially be useful
 		}))
 	)
 
