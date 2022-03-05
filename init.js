@@ -2,13 +2,8 @@ const fetch = require("node-fetch")
 const cheerio = require("cheerio")
 const jsonic = require("jsonic")
 
-const debug = arg => {
-	console.log(arg)
-	return arg
-}
-
 module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0") =>
-	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(debug(query)), {headers: {"User-Agent": userAgent}}).then(res => res.text()).then(data =>
+	fetch("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(query), {headers: {"User-Agent": userAgent}}).then(res => res.text()).then(data =>
 		cheerio.load(data, null, false)                                               // parse HTML
 			("script")                                                                // find script tags
 			.toArray()                                                                // convert cheerio list to array

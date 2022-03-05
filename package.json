@@ -1,6 +1,6 @@
 {
   "name": "free-google-images",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Reverse Engineered Google Image Search API",
   "main": "init.js",
   "scripts": {
