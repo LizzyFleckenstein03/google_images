@@ -27,7 +27,7 @@ Exports `search` function that takes query string as first argument and optional
 ### Example
 
 ```js
-const {search} = require("google_images");
+const {search} = require("free-google-images");
 search("astolfo+images").then(results => results.forEach(r => console.log(r.image.url)))
 ```
 
