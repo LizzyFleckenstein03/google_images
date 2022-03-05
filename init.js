@@ -35,7 +35,7 @@ module.exports.search = (query, userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86
 	)
 
 module.exports.searchRandom = (query, userAgent) => module.exports.search(query, userAgent)
-	.then(results => results[Math.floor(Math.random() * results.length))
+	.then(results => results[Math.floor(Math.random() * results.length)])
 
 /*
 
