@@ -1,5 +1,7 @@
-# google_images
+# free-google-images
 Reverse Engineered Google Image Search API
+
+The usage of this API does NOT require an API key, nor is it rate limited.
 
 ## Usage
 
