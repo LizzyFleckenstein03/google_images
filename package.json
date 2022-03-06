@@ -10,6 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/EliasFleckenstein03/google_images.git"
   },
+  "keywords": [
+    "google",
+    "images",
+    "google images",
+    "image search"
+  ],
   "author": "EliasFleckenstein03",
   "license": "MIT",
   "bugs": {
